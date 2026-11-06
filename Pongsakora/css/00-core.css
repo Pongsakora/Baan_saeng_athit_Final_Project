@@ -1,0 +1,807 @@
+/* ============================================================
+   00-core.css
+   สไตล์พื้นฐานที่ใช้ร่วมกันทุกหน้า: ตัวแปรสี, เลย์เอาต์หลัก,
+   ปุ่ม, ฟอร์ม, การ์ด, ตาราง, badge, modal, เมนูนำทาง, หน้า login
+   ต้องโหลดไฟล์นี้ก่อนไฟล์อื่นเสมอ
+   ============================================================ */
+
+:root{
+  --sun:#f79b1b;
+  --sun-light:#ffd98a;
+  --sun-dark:#d67a00;
+  --sea:#18324a;
+  --sea-mid:#25517a;
+  --sea-light:#4f89c3;
+  --paper:#f7f4ee;
+  --ivory:#fffdf7;
+  --white:#ffffff;
+  --text-dark:#112437;
+  --text-mid:#3d4e61;
+  --text-light:#6f7f90;
+  --success:#2f9d73;
+  --danger:#dc4c44;
+  --warning:#d5852a;
+  --border:#e6dcc8;
+  --border-strong:#d9c7a5;
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow-sm:0 6px 18px rgba(17,36,55,0.08);
+  --shadow-md:0 14px 30px rgba(17,36,55,0.12);
+  --shadow-lg:0 24px 50px rgba(17,36,55,0.18);
+  --ring:0 0 0 3px rgba(247,155,27,0.2);
+  /* Compatibility aliases for existing inline styles in app.js */
+  --sky:var(--sea);
+  --sky-mid:var(--sea-mid);
+  --sky-light:var(--sea-light);
+  --cream:var(--paper);
+  --warm-white:var(--ivory);
+  --shadow:var(--shadow-md);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{min-height:100vh;}
+
+body{
+  font-family:'Sarabun',sans-serif;
+  color:var(--text-dark);
+  background:
+    radial-gradient(1300px 600px at -10% -10%,#fff4d6 0%,transparent 60%),
+    radial-gradient(900px 450px at 110% 5%,#daeaff 0%,transparent 62%),
+    linear-gradient(180deg,#fffdf8 0%,var(--paper) 100%);
+  /* ทั้งแอปเป็น UI แบบกดปุ่ม/คลิกเป็นหลัก ไม่ใช่เอกสารให้เลือกคัดลอกข้อความ แต่ก่อนหน้านี้ไม่ได้ปิด
+     user-select ไว้เลย พอผู้ใช้กดโดนตัวหนังสือ (ในตาราง, ป้ายสถานะ, เมนู ฯลฯ) จะเกิดการไฮไลต์ข้อความ
+     พร้อมเคอร์เซอร์กระพริบ ทำให้ดูเหมือนช่องนั้นแก้ไขได้ทั้งที่ไม่ใช่ จึงปิดไว้เป็นค่าเริ่มต้นทั้งแอป
+     แล้วเปิดกลับเฉพาะจุดที่ควรเลือกข้อความได้จริง (ช่องกรอกข้อมูล, เอกสารที่จะพิมพ์) ด้านล่าง */
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+input,textarea,select,
+.form-input,
+#printRoot,#printRoot *{
+  user-select:text;
+  -webkit-user-select:text;
+}
+
+/* #printRoot คือกล่องชั่วคราวที่ printHtml() สร้างขึ้นมาแปะท้าย <body> ก่อนสั่งพิมพ์ (ดูคอมเมนต์เต็ม
+   ที่ @media print ด้านล่าง) ปกติจะถูกลบออกตอน afterprint แต่ถ้าผู้ใช้กด "ยกเลิก"/ปิดหน้าต่างพิมพ์
+   โดยไม่ได้กดพิมพ์จริง บางเบราว์เซอร์ไม่ยิง afterprint ให้ ตัว div เลยค้างอยู่ในหน้าเว็บ แล้วเพราะ
+   ก่อนหน้านี้ไม่มีกฎซ่อนไว้นอก @media print เลย มันเลยโผล่เป็นกล่องใบเสร็จ/ใบแจ้งหนี้ค้างอยู่ท้ายหน้า
+   จอปกติให้เห็น จึงต้องซ่อนไว้เป็นค่าเริ่มต้นเสมอ แล้วเปิดเฉพาะตอนพิมพ์จริงด้วย !important ด้านล่าง */
+#printRoot{ display:none; }
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@keyframes pulseGlow{0%{box-shadow:0 0 0 0 rgba(247,155,27,0.35)}70%{box-shadow:0 0 0 12px rgba(247,155,27,0)}100%{box-shadow:0 0 0 0 rgba(247,155,27,0)}}
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(700px 420px at 80% -20%,rgba(255,208,117,0.35),transparent 60%),
+    linear-gradient(140deg,#102237 0%,#1e456a 50%,#275178 100%);
+  position:relative;
+  overflow:hidden;
+}
+
+#loginScreen::before{
+  content:'';
+  position:absolute;
+  width:620px;
+  height:620px;
+  background:radial-gradient(circle,rgba(255,205,125,0.28) 0%,transparent 70%);
+  top:-220px;
+  left:-140px;
+  border-radius:50%;
+}
+
+#loginScreen::after{
+  content:'';
+  position:absolute;
+  width:540px;
+  height:540px;
+  background:radial-gradient(circle,rgba(92,154,212,0.28) 0%,transparent 70%);
+  bottom:-220px;
+  right:-120px;
+  border-radius:50%;
+}
+
+.login-box{
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.75);
+  border-radius:28px;
+  padding:48px 40px;
+  width:min(92vw,430px);
+  box-shadow:0 30px 70px rgba(7,20,35,0.35);
+  position:relative;
+  z-index:1;
+  animation:fadeUp .6s ease;
+}
+
+.sun-icon{
+  font-size:58px;
+  animation:spin 20s linear infinite;
+  display:inline-block;
+  filter:drop-shadow(0 8px 14px rgba(247,155,27,0.35));
+}
+
+.login-title{
+  font-family:'Prompt',sans-serif;
+  font-size:28px;
+  font-weight:700;
+  color:var(--sea);
+  margin-top:8px;
+  letter-spacing:.2px;
+}
+
+.login-sub{font-size:16px;color:var(--text-light);margin-top:4px;}
+
+.tab-btn.active{
+  background:var(--white);
+  color:var(--sea);
+  box-shadow:var(--shadow-sm);
+}
+
+.form-group{margin-bottom:18px;}
+
+.form-label{
+  display:block;
+  font-size:15px;
+  font-weight:600;
+  color:var(--sea-mid);
+  margin-bottom:7px;
+}
+
+.form-input{
+  width:100%;
+  padding:12px 14px 14px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  font-family:'Sarabun',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  color:var(--text-dark);
+  outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+  background:var(--ivory);
+}
+
+.form-input::placeholder{color:#93a0ac;}
+
+.form-input:focus{
+  border-color:var(--sun);
+  box-shadow:var(--ring);
+  background:var(--white);
+}
+
+.btn-login{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(125deg,var(--sun) 0%,var(--sun-dark) 95%);
+  border:none;
+  border-radius:12px;
+  color:#fff;
+  font-family:'Prompt',sans-serif;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+  box-shadow:0 10px 24px rgba(214,122,0,.38);
+}
+
+.btn-login:hover{transform:translateY(-2px);filter:brightness(1.02);}
+
+.btn-login:active{transform:translateY(0);}
+
+.login-error{
+  background:#fff3f2;
+  border:1px solid #ffc8c5;
+  color:var(--danger);
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:16px;
+  margin-bottom:16px;
+  display:none;
+}
+
+#appShell{
+  display:none;
+  min-height:100vh;
+  background:
+    radial-gradient(700px 340px at 110% -8%,rgba(79,137,195,.18) 0%,transparent 72%),
+    radial-gradient(800px 360px at -15% -10%,rgba(247,155,27,.13) 0%,transparent 72%),
+    var(--paper);
+}
+
+.topbar{
+  background:linear-gradient(125deg,#142b42 0%,#1f4568 70%,#2f5f88 100%);
+  padding:0 24px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 8px 22px rgba(17,36,55,.28);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.topbar-left{display:flex;align-items:center;gap:12px;}
+
+.topbar-logo{font-size:28px;filter:drop-shadow(0 5px 8px rgba(0,0,0,.25));}
+
+.topbar-title{
+  font-family:'Prompt',sans-serif;
+  font-weight:700;
+  color:#fff;
+  font-size:18px;
+  line-height:1.1;
+}
+
+.topbar-sub{font-size:16px;color:rgba(255,255,255,.72);}
+
+.topbar-user{display:flex;align-items:center;gap:10px;}
+
+.user-badge{
+  background:rgba(247,155,27,.2);
+  border:1px solid rgba(255,217,138,.38);
+  color:#ffe6b6;
+  padding:7px 14px;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.notif-bell{
+  position:relative;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:background .2s ease,transform .2s ease;
+}
+
+.notif-bell:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+
+.notif-bell:active{transform:translateY(0);}
+
+.notif-badge{
+  position:absolute;
+  left:-4px;
+  bottom:-4px;
+  min-width:18px;
+  height:18px;
+  padding:0 4px;
+  border-radius:999px;
+  background:#e5433d;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  line-height:18px;
+  text-align:center;
+  box-shadow:0 0 0 2px #1f4568;
+}
+
+.notif-list-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:background .15s ease;
+}
+
+.notif-list-item:hover{background:#F7F3E8;}
+
+/* การแจ้งเตือนที่ยังไม่เคยเปิดดู ให้ขอบแดงเด่นกว่ารายการเก่าที่เคยเปิดดูแล้ว */
+.notif-list-item.notif-unseen{border:2px solid var(--danger);}
+
+.notif-time{font-size:16px;color:var(--text-light);margin-top:4px;}
+
+.btn-logout{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.24);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:10px;
+  font-family:'Sarabun',sans-serif;
+  font-size:16px;
+  cursor:pointer;
+  transition:background .2s ease,border-color .2s ease;
+}
+
+.btn-logout:hover{
+  background:rgba(255,255,255,.18);
+  border-color:rgba(255,255,255,.35);
+}
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 72px);
+  gap:20px;
+  padding:20px;
+}
+
+.sidebar{
+  width:258px;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.85);
+  border-radius:18px;
+  padding:16px 10px;
+  flex-shrink:0;
+  overflow-y:auto;
+  box-shadow:var(--shadow-sm);
+}
+
+.nav-section-title{
+  font-size:16px;
+  font-weight:700;
+  color:#8492a1;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  padding:8px 14px 6px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  margin:0 4px 4px;
+  cursor:pointer;
+  transition:all .2s ease;
+  color:var(--text-mid);
+  font-size:16px;
+  font-weight:500;
+  border-radius:12px;
+  border:1px solid transparent;
+  /* เมนูด้านข้างเป็นแค่ปุ่มเปลี่ยนหน้า ไม่ใช่ช่องกรอกข้อความ แต่ก่อนหน้านี้ไม่ได้ปิด user-select
+     ไว้ พอผู้ใช้กดค้าง/ดับเบิลคลิกโดนตัวหนังสือ เบราว์เซอร์เลยไฮไลต์ข้อความและขึ้นเคอร์เซอร์กระพริบ
+     ให้ดูเหมือนแก้ไขได้ ทั้งที่จริงๆ กดแล้วแค่เปลี่ยนหน้าเฉยๆ จึงปิดการเลือกข้อความไว้กันสับสน */
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.nav-item:hover{
+  background:rgba(247,155,27,.12);
+  color:var(--sea);
+  border-color:rgba(247,155,27,.22);
+}
+
+.nav-item.active{
+  background:linear-gradient(90deg,rgba(247,155,27,.22),rgba(247,155,27,.08));
+  color:var(--sea);
+  border-color:rgba(247,155,27,.34);
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(247,155,27,.18);
+}
+
+.nav-icon{font-size:18px;width:22px;text-align:center;}
+
+.main-content{
+  flex:1;
+  padding:10px 8px;
+  overflow-y:auto;
+}
+
+.page{display:none;}
+
+.page.active{display:block;animation:fadeIn .35s ease;}
+
+.page-header{margin-bottom:24px;}
+
+.page-title{
+  font-family:'Prompt',sans-serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--sea);
+  letter-spacing:.2px;
+}
+
+.page-subtitle{font-size:16px;color:var(--text-light);margin-top:2px;}
+
+.card{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(6px);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow-md);
+  border:1px solid rgba(255,255,255,.9);
+  margin-bottom:20px;
+}
+
+/* กล่องแสดงผลการดำเนินการของแอดมิน ใช้ซ้ำในหน้าแจ้งเหตุของผู้เช่า/ตรวจสอบของแอดมิน/ประวัติ */
+.response-box{
+  margin-top:8px;
+  background:#EBF4FF;
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:16px;
+}
+
+/* กล่องเตือนสีแดงอ่อน ใช้สำหรับรายการค้างชำระ/เรื่องด่วน */
+.alert-box-danger{
+  background:#FFF5F5;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:12px;
+  border-left:4px solid var(--danger);
+}
+
+/* การ์ดสรุปตัวเลขขนาดเล็ก (เช่น รายรับ/รายจ่าย/กำไรสุทธิ) ใช้ร่วมกับตัวปรับสี stat-box-success/danger/info */
+.stat-box{
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+}
+.stat-box-success{background:#F0FFF4;}
+.stat-box-danger{background:#FFF5F5;}
+.stat-box-info{background:#EBF8FF;}
+.stat-box-label{font-size:16px;color:var(--text-light);}
+.stat-box-value{
+  font-family:'Prompt',sans-serif;
+  font-size:18px;
+  font-weight:700;
+}
+
+/* จุดสีเล็กๆ หน้าป้ายกำกับ (legend) เช่นใต้กราฟรายรับ-รายจ่าย */
+.legend-dot{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.legend-dot span{
+  width:10px;
+  height:10px;
+  border-radius:2px;
+  display:inline-block;
+}
+
+.card-title{
+  font-family:'Prompt',sans-serif;
+  font-size:17px;
+  font-weight:600;
+  color:var(--sea-mid);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+  border:1px solid #efe6d3;
+  border-radius:14px;
+  background:#fff;
+}
+
+/* อาจารย์ท้วงว่าตัวอักษรในหน้าประวัติผู้เช่าเล็กไป ตอนนั้นขยายเฉพาะหน้านั้นด้วย inline style
+   (ดูคอมเมนต์ใน js/04-admin-tenants.js) รอบนี้ขอให้ขยายแบบเดียวกันในหลายๆ หน้า เลยปรับที่ขนาด
+   ตัวอักษรพื้นฐานของตาราง/ปุ่ม/ป้ายสถานะ/หัวข้อการ์ดตรงนี้แทน เพราะ class พวกนี้ใช้ร่วมกันแทบทุกหน้า
+   ทั่วทั้งแอปจะได้อ่านง่ายขึ้นเหมือนกันหมดโดยไม่ต้องไปไล่แก้ทีละไฟล์ */
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:16px;}
+
+th{
+  background:#f9f3e5;
+  color:var(--sea-mid);
+  font-weight:700;
+  padding:13px 16px;
+  text-align:left;
+  font-size:16px;
+  letter-spacing:.2px;
+  border-bottom:1px solid #eadabd;
+}
+
+td{
+  padding:12px 16px;
+  border-bottom:1px solid #f1e8d8;
+  color:var(--text-mid);
+}
+
+tr:last-child td{border-bottom:none;}
+
+tr:hover td{background:#fffbf3;}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:15px;
+  font-weight:700;
+}
+
+.badge-success{background:#d4f6e9;color:#1f7654;}
+
+.badge-danger{background:#ffe0de;color:#9c2d2a;}
+
+.badge-warning{background:#fff0d7;color:#9a5d14;}
+
+.badge-info{background:#d9ebff;color:#235887;}
+
+.badge-gray{background:#edf1f4;color:#4d6073;}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 16px;
+  border-radius:10px;
+  font-family:'Sarabun',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease,background .2s ease;
+}
+
+.btn:hover{transform:translateY(-1px);}
+
+.btn:active{transform:translateY(0);}
+
+.btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  filter:grayscale(.3);
+  box-shadow:none;
+  transform:none;
+}
+
+.btn:disabled:hover{transform:none;}
+
+.btn-primary{
+  background:linear-gradient(130deg,var(--sun) 0%,var(--sun-dark) 92%);
+  color:#fff;
+  box-shadow:0 10px 20px rgba(214,122,0,.28);
+}
+
+.btn-sky{
+  background:linear-gradient(130deg,var(--sea-mid),#183654);
+  color:#fff;
+  box-shadow:0 10px 20px rgba(24,50,74,.24);
+}
+
+.btn-success{
+  background:linear-gradient(130deg,#3cb883,#2f9d73);
+  color:#fff;
+}
+
+.btn-danger{
+  background:linear-gradient(130deg,#ed6861,#dc4c44);
+  color:#fff;
+}
+
+.btn-outline{
+  background:#fff;
+  border:1px solid #e6d9bd;
+  color:var(--text-mid);
+}
+
+.btn-outline:hover{
+  border-color:#d9c49a;
+  background:#fffcf5;
+}
+
+.btn-sm{padding:6px 12px;font-size:16px;}
+
+.btn-xs{padding:4px 9px;font-size:16px;}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+select.form-input{cursor:pointer;}
+
+textarea.form-input{resize:vertical;min-height:88px;}
+
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(10,20,33,.45);
+  z-index:999;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(3px);
+}
+
+.modal-overlay.open{display:flex;}
+
+.modal{
+  background:#fff;
+  border-radius:22px;
+  padding:28px;
+  width:min(92vw,560px);
+  box-shadow:var(--shadow-lg);
+  max-height:90vh;
+  overflow-y:auto;
+  animation:fadeUp .3s ease;
+}
+
+.modal-title{
+  font-family:'Prompt',sans-serif;
+  font-size:19px;
+  font-weight:700;
+  color:var(--sea);
+  margin-bottom:20px;
+}
+
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+
+/* โหมดพิมพ์ของทั้งแอป — ใช้ร่วมกันทั้งใบเสร็จ/ใบแจ้งหนี้ที่เปิดผ่าน openModal() (พิมพ์บิลผู้เช่า,
+   ใบแจ้งหนี้ค้างชำระ, ใบเสร็จหลังตรวจสลิป, พิมพ์ใบเสร็จจากประวัติ) และรายงานรายรับ-รายจ่าย
+   วิธีเดิม (ซ่อนทุกอย่างด้วย visibility:hidden แล้วเปิดเฉพาะกล่องที่จะพิมพ์ด้วย position:absolute)
+   ยังเหลือปัญหา: element ที่ถูกซ่อนด้วย visibility:hidden ยัง "กินความสูง" ของเอกสารอยู่เหมือนเดิม
+   (แค่มองไม่เห็น) พอรวมความสูงที่มองไม่เห็นนี้เข้ากับเนื้อหาจริงที่จะพิมพ์ เอกสารรวมเลยสูงเกิน 1 หน้า
+   กระดาษ A4 ไปเล็กน้อย ระบบเลยพิมพ์ออกมาเป็นหน้า 2 ว่างเปล่าเพิ่มมาอีกแผ่นเสมอ
+   แก้ด้วยวิธีที่ตัดปัญหานี้ขาดเลย: ก่อนพิมพ์ ให้ JS คัดลอกเฉพาะเนื้อหาที่จะพิมพ์ไปสร้างเป็น
+   div ใหม่ชื่อ #printRoot แปะไว้เป็นลูกตรงของ <body> (ไม่ซ้อนอยู่ในโครงหน้าเดิมอีกต่อไป)
+   แล้วค่อยสั่งพิมพ์ — ตอนพิมพ์ใช้ display:none ซ่อนพี่น้องตัวอื่นของ #printRoot ทั้งหมด (ไม่ใช่แค่
+   visibility:hidden) ซึ่ง display:none ทำให้ element นั้นไม่กินพื้นที่เอกสารเลย ความสูงรวมของ
+   เอกสารตอนพิมพ์จึงเท่ากับความสูงของเนื้อหาจริงที่จะพิมพ์พอดี ดูฟังก์ชัน printHtml() ใน 00-core.js */
+@media print{
+  body > *:not(#printRoot){ display:none !important; }
+  #printRoot{ display:block !important; }
+  #printRoot .no-print{ display:none !important; }
+  /* กล่องสรุปรายรับ/รายจ่าย/กำไรสุทธิ (.finance-3col) มีกฎ @media(max-width:768px) ที่ยุบเป็น
+     1 คอลัมน์ไว้สำหรับจอมือถือ (ดู css/05-admin-finance.css) แต่เบราว์เซอร์คำนวณความกว้างหน้ากระดาษ
+     ตอนพิมพ์โดยอิงจากขนาดกระดาษจริง (เช่น A4 แคบกว่า 768px) กฎนั้นเลยดันทำงานตอนพิมพ์ไปด้วย ทำให้
+     3 กล่องเรียงต่อกันแนวตั้งแทนที่จะเป็น 3 คอลัมน์เหมือนบนจอ จึงบังคับกลับเป็น 3 คอลัมน์เสมอตอนพิมพ์ */
+  #printRoot .finance-3col{ grid-template-columns:1fr 1fr 1fr !important; }
+
+  /* สีจางตอนพิมพ์ (เช่น ใบเสร็จพื้นน้ำเงินตัวอักษรขาวกลายเป็นสีเทาซีด): ค่าเริ่มต้นของเบราว์เซอร์ส่วนใหญ่
+     เมื่อ "พิมพ์พื้นหลัง/กราฟิก" (background graphics) ไม่ได้ติ๊กไว้ คือไม่พิมพ์สีพื้นหลังและปรับสีตัวอักษร
+     อ่อนลงอัตโนมัติเพื่อไม่ให้ขาวบนขาวจนมองไม่เห็น ทำให้ทั้งพื้นหลังไล่สีและตัวหนังสือขาวดูจางซีดไปหมด
+     แก้ด้วย print-color-adjust:exact เพื่อสั่งเบราว์เซอร์ให้พิมพ์สีตามที่กำหนดไว้จริง ไม่ปรับเองอีก */
+  #printRoot, #printRoot *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    color-adjust:exact !important;
+  }
+}
+
+.slip-preview{
+  background:linear-gradient(140deg,#142d46,#224d74);
+  border-radius:16px;
+  padding:28px;
+  color:#fff;
+}
+
+.slip-header{
+  text-align:center;
+  border-bottom:1px dashed rgba(255,255,255,.35);
+  padding-bottom:16px;
+  margin-bottom:16px;
+}
+
+.slip-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:16px;gap:20px;}
+
+.slip-total{
+  border-top:1px dashed rgba(255,255,255,.35);
+  margin-top:12px;
+  padding-top:12px;
+  font-family:'Prompt',sans-serif;
+  font-size:18px;
+  font-weight:700;
+}
+
+.divider{height:1px;background:#ecdcbf;margin:20px 0;}
+
+.text-danger{color:var(--danger);}
+
+.flex{display:flex;}
+
+.flex-between{display:flex;justify-content:space-between;align-items:center;}
+
+.gap-10{gap:10px;}
+
+.mb-16{margin-bottom:16px;}
+
+.alert{
+  padding:12px 16px;
+  border-radius:12px;
+  font-size:16px;
+  margin-bottom:16px;
+  border:1px solid transparent;
+}
+
+.alert-success{background:#d7f7ea;color:#1e7853;border-color:#b7ecd7;}
+
+.alert-info{background:#dbefff;color:#2d5b84;border-color:#c1e2fd;}
+
+.room-card.occupied{border-color:#a6c5e3;background:#ebf4ff;}
+
+.room-card.vacant{border-color:#9dd8c2;background:#effcf6;}
+
+::-webkit-scrollbar{width:10px;height:10px;}
+
+::-webkit-scrollbar-track{background:#f0e9da;border-radius:999px;}
+
+::-webkit-scrollbar-thumb{background:#d7c7a6;border-radius:999px;}
+
+::-webkit-scrollbar-thumb:hover{background:#c9b28b;}
+
+@media (max-width:1100px){
+  .layout{
+    flex-direction:column;
+    gap:14px;
+    padding:14px;
+  }
+  .sidebar{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:10px;
+  }
+  .nav-section-title{
+    display:none;
+  }
+  .nav-item{
+    white-space:nowrap;
+    margin:0;
+  }
+  .main-content{
+    padding:4px 0 0;
+  }
+}
+
+@media (max-width:768px){
+  .topbar{
+    height:auto;
+    min-height:72px;
+    padding:10px 14px;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .topbar-user{
+    width:100%;
+    justify-content:flex-end;
+  }
+  .login-box{
+    padding:34px 22px;
+    border-radius:22px;
+  }
+  .page-title{
+    font-size:21px;
+  }
+  .card{
+    padding:16px;
+  }
+  .form-row,.form-row-3{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+  .table-wrap{
+    border-radius:12px;
+  }
+  th,td{
+    padding:10px 12px;
+  }
+  .modal{
+    padding:20px 16px;
+  }
+}

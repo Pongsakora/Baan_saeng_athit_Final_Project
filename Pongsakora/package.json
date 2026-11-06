@@ -1,0 +1,16 @@
+{
+  "name": "house-sunset",
+  "version": "1.0.0",
+  "private": true,
+  "description": "House Sunset dorm management with MySQL backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5",
+    "promptpay-qr": "^0.5.0",
+    "qrcode": "^1.5.4"
+  }
+}

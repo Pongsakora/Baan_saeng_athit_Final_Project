@@ -1,0 +1,77 @@
+/* ============================================================
+   02-admin-overview.css
+   สไตล์เฉพาะหน้าภาพรวมฝั่งแอดมิน (แดชบอร์ด, จัดการห้องพัก, หนี้ค้างชำระ)
+   ============================================================ */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.stat-card{
+  background:linear-gradient(180deg,#fff 0%,#fffaf1 100%);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow-md);
+  border:1px solid #f2e5ca;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat-card::before{
+  content:'';
+  position:absolute;
+  top:-24px;
+  right:-20px;
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  opacity:.15;
+}
+
+.stat-card.gold::before{background:var(--sun);}
+
+.stat-card.blue::before{background:var(--sea-light);}
+
+.stat-card.green::before{background:var(--success);}
+
+.stat-card.red::before{background:var(--danger);}
+
+.stat-value{
+  font-family:'Prompt',sans-serif;
+  font-size:32px;
+  font-weight:700;
+  color:var(--sea);
+}
+
+.stat-label{font-size:15px;color:var(--text-light);margin-top:4px;}
+
+.stat-icon{position:absolute;top:16px;right:16px;font-size:28px;opacity:.65;}
+
+.alert-danger{background:#ffe1df;color:#a1322e;border-color:#ffc4c0;}
+
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;}
+
+.room-card{
+  border:1px solid #ecdcbc;
+  border-radius:14px;
+  padding:16px 12px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s ease;
+  box-shadow:var(--shadow-sm);
+  background:#fffefb;
+}
+
+.room-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+
+.room-number{
+  font-family:'Prompt',sans-serif;
+  font-size:20px;
+  font-weight:700;
+  color:var(--sea);
+}
+
+.room-status-text{font-size:16px;font-weight:700;margin-top:4px;color:var(--text-mid);}

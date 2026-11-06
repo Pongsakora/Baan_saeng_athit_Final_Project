@@ -1,0 +1,17 @@
+/* ============================================================
+   01-tenant.css
+   สไตล์เฉพาะหน้าจอฝั่งผู้เช่า (ประวัติการชำระเงิน, ชำระเงิน,
+   แจ้งเหตุ, ขอออกจากหอพัก)
+   ============================================================ */
+
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+.qr-box{
+  background:linear-gradient(140deg,#fff9e8,#ffe5ad);
+  border:2px dashed var(--sun);
+  border-radius:16px;
+  padding:32px;
+  text-align:center;
+}
+
+.mt-16{margin-top:16px;}

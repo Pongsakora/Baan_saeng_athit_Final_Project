@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บ้านแสงอาทิตย์ - ระบบจัดการหอพัก</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/00-core.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/01-tenant.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/02-admin-overview.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/03-admin-reports.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/04-admin-tenants.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/05-admin-finance.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/06-admin-print-settings.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/07-admin-users.css?v=20260911-css-split-1">
+<link rel="stylesheet" href="/css/08-init.css?v=20260911-css-split-1">
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:32px">
+      <div class="sun-icon">☀️</div>
+      <div class="login-title">บ้านแสงอาทิตย์</div>
+      <div class="login-sub">ระบบจัดการหอพัก</div>
+    </div>
+<div class="login-error" id="loginError">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+    <div class="form-group">
+      <label class="form-label" id="usernameLabel">ชื่อผู้ใช้ (User)</label>
+      <input class="form-input" id="loginUsername" type="text" placeholder="กรอกชื่อผู้ใช้ (User)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">รหัสผ่าน</label>
+      <input class="form-input" id="loginPassword" type="password" placeholder="กรอกรหัสผ่าน">
+    </div>
+    <button class="btn-login" onclick="doLogin()">เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<div id="appShell">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">☀️</div>
+      <div>
+        <div class="topbar-title">บ้านแสงอาทิตย์</div>
+        <div class="topbar-sub">ระบบจัดการหอพัก</div>
+      </div>
+    </div>
+    <div class="topbar-user">
+      <button class="notif-bell" id="notifBell" onclick="openNotifPopup()" style="display:none" title="การแจ้งเตือน">
+        🔔<span class="notif-badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <div class="user-badge" id="userBadge">—</div>
+      <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar" id="sidebarNav"></div>
+    <div class="main-content" id="mainContent"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox">
+    <div class="modal-title" id="modalTitle"></div>
+    <div id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<script src="/js/00-core.js?v=20260816-split-1"></script>
+<script src="/js/01-tenant.js?v=20260816-split-1"></script>
+<script src="/js/02-admin-overview.js?v=20260816-split-1"></script>
+<script src="/js/03-admin-reports.js?v=20260816-split-1"></script>
+<script src="/js/04-admin-tenants.js?v=20260816-split-1"></script>
+<script src="/js/05-admin-finance.js?v=20260816-split-1"></script>
+<script src="/js/06-admin-print-settings.js?v=20260816-split-1"></script>
+<script src="/js/07-admin-users.js?v=20260816-split-1"></script>
+<script src="/js/08-init.js?v=20260816-split-1"></script>
+</body>
+</html>
